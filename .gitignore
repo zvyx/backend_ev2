@@ -1,0 +1,17 @@
+# Entorno virtual
+venv_ev2/
+env/
+.venv/
+
+# Byte-code / caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Variables de entorno / secretos
+.env
+.env.local
+
+# VS Code (excepto settings básicos si se desean compartir)
+.vscode/*
+!.vscode/settings.json
