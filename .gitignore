@@ -15,3 +15,10 @@ __pycache__/
 # VS Code (excepto settings básicos si se desean compartir)
 .vscode/*
 !.vscode/settings.json
+
+
+# Documentos e informes (Privados)                            
+*.docx                                                        
+*.pdf                                                         
+*.png                                                         
+*.md   
