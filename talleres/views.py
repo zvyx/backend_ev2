@@ -21,23 +21,23 @@ class TallerViewSet(viewsets.ModelViewSet):
     serializer_class=TallerSerializer
     
     def get_queryset(self):
-        self.queryset=Taller.objects.all()
+        queryset = Taller.objects.all()
         
-        estado=self.request.query.params.get('estado') #filtro GET para ver el estado del taller
+        estado = self.request.query_params.get('estado') # filtro GET para ver el estado del taller
         if estado:
-            queryset=queryset.filter(estado=estado)
+            queryset = queryset.filter(estado=estado)
     
-        profesor=self.request.query.params.get('profesor') #fltro GET para ver el profesor del taller
+        profesor = self.request.query_params.get('profesor') # filtro GET para ver el profesor del taller
         if profesor:
-            queryset=queryset.filter(profesor_id=profesor)
+            queryset = queryset.filter(profesor_id=profesor)
             
-        buscar=self.request.query.params.get('buscar') #filtro GET para ubscar por taller
+        buscar = self.request.query_params.get('buscar') # filtro GET para buscar por taller
         if buscar:
-            queryset=queryset.filter(nombre__incontains=buscar)
+            queryset = queryset.filter(nombre__icontains=buscar)
             
         return queryset
         
-    @action(detail=True, methods=['get']) #consulta metodo GET para la url /api/talleres/1/inscripciones/ muestra los alumnos segun el id del taller
+    @action(detail=True, methods=['get']) # consulta metodo GET para la url /api/talleres/1/inscripciones/ muestra los alumnos segun el id del taller
     def inscripciones(self, request, pk=None):
         taller = self.get_object()
         inscripciones = taller.inscripciones.filter(estado='activa')
@@ -45,14 +45,14 @@ class TallerViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 class InscripcionViewSet(viewsets.ModelViewSet):
-    queryset=Inscripcion.objects.all()
-    serializer_class=InscripcionSerializer
+    queryset = Inscripcion.objects.all()
+    serializer_class = InscripcionSerializer
     
-    def get_queryset(self):#filtro GET para buscar alumno /api/inscripciones/?alumno=1
-        queryset=Inscripcion.objects.all()
-        alumno=self.request.query.params.get('alumno')
+    def get_queryset(self): # filtro GET para buscar alumno /api/inscripciones/?alumno=1
+        queryset = Inscripcion.objects.all()
+        alumno = self.request.query_params.get('alumno')
         if alumno:
-            queryset=queryset.filter(alumno_id=alumno)
+            queryset = queryset.filter(alumno_id=alumno)
         return queryset
     
 class AsistenciaViewSet(viewsets.ModelViewSet):
