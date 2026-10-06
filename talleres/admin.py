@@ -8,7 +8,7 @@ admin.site.unregister(Group)
 
 @admin.register(Usuario)
 class UsuarioAdmin(admin.ModelAdmin):
-    list_display = ('nombre_completo', 'rut', 'email', 'rol', 'activo')
+    list_display = ('nombre_completo', 'rut', 'email', 'rol', 'activo', 'user')
     list_filter = ('rol', 'activo')
     search_fields = ('nombre_completo', 'rut', 'email')
 

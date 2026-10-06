@@ -39,9 +39,21 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #rest
     'rest_framework', 
+    'rest_framework.authtoken',
     #app de talleres
     'talleres',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'EXCEPTION_HANDLER': 'talleres.exceptions.custom_exception_handler',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

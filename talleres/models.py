@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 #(Docentes, Alumnos, Jefatura, Admins)
 class Usuario(models.Model):
@@ -9,6 +10,7 @@ class Usuario(models.Model):
         ('JEFE', 'Jefatura / Rector'),
     ]
     
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='usuario')
     nombre_completo = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     rut=models.CharField(max_length=12, unique=True)

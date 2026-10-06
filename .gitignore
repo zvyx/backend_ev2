@@ -12,13 +12,23 @@ __pycache__/
 .env
 .env.local
 
-# VS Code (excepto settings básicos si se desean compartir)
+# VS Code
 .vscode/*
 !.vscode/settings.json
 
+# Documentos e informes de evaluación (Privados)
+*.docx
+*.doc
+*.pdf
+*.png
+*.md
+!README.md
+!GUIA_DESPLIEGUE_Y_PRUEBAS.md
 
-# Documentos e informes (Privados)                            
-*.docx                                                        
-*.pdf                                                         
-*.png                                                         
-*.md   
+# Scripts de pruebas locales y utilidades temporales
+test_live_api.py
+poblar_datos_test.py
+generate_docx_report.py
+
+# Grafos y reportes locales
+graphify-out/
