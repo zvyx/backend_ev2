@@ -15,7 +15,10 @@ router.register(r'inscripciones', InscripcionViewSet, basename='inscripcion')
 router.register(r'asistencias', AsistenciaViewSet, basename='asistencia')
 
 urlpatterns = [
-    # Autenticación JWT e ingreso por correo
+    # Panel visual de ingreso (Navegador Web)
+    path('', LoginView.as_view(), name='home'),
+    path('login/', LoginView.as_view(), name='web_login'),
+    # Autenticación JWT e ingreso para API (Postman / Clientes REST)
     path('api/login/', LoginView.as_view(), name='login'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # Endpoints de los recursos

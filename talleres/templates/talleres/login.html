@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso al Sistema | Talleres Extracurriculares INACAP</title>
+    <style>
+        :root {
+            --primary: #102c57;
+            --primary-dark: #0a1b36;
+            --accent: #e63946;
+            --secondary: #2980b9;
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-muted: #6c757d;
+            --border: #dcdfe6;
+            --danger-bg: #fde8e8;
+            --danger-border: #f8b4b4;
+            --danger-text: #9b1c1c;
+            --success-bg: #def7ec;
+            --success-border: #bcf0da;
+            --success-text: #03543f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Barra superior tipo Django Admin / Institucional */
+        header {
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-badge {
+            background-color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .header-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-left: 16px;
+            transition: color 0.2s;
+        }
+
+        .header-links a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Contenedor central */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 460px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(16, 44, 87, 0.08);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #fafbfc;
+            border-bottom: 1px solid var(--border);
+            padding: 20px 24px;
+            text-align: center;
+        }
+
+        .card-header h1 {
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .card-header p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .card-body {
+            padding: 28px 24px;
+        }
+
+        /* Mensajes de Alerta */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.4;
+        }
+
+        .alert-danger {
+            background-color: var(--danger-bg);
+            border: 1px solid var(--danger-border);
+            color: var(--danger-text);
+        }
+
+        .alert-success {
+            background-color: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: var(--success-text);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.15);
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            background-color: var(--primary);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.15s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            margin-top: 10px;
+        }
+
+        .btn-outline:hover {
+            background-color: #f0f4f8;
+            color: var(--primary-dark);
+        }
+
+        /* Vista de perfil logueado */
+        .profile-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .badge-admin { background: #fee2e2; color: #991b1b; }
+        .badge-jefe { background: #ede9fe; color: #5b21b6; }
+        .badge-profesor { background: #dcfce7; color: #166534; }
+        .badge-alumno { background: #e0f2fe; color: #075985; }
+
+        .token-box {
+            background-color: #f8fafc;
+            border: 1px dashed var(--border);
+            padding: 12px;
+            border-radius: 6px;
+            margin: 16px 0;
+            text-align: left;
+        }
+
+        .token-text {
+            font-family: monospace;
+            font-size: 0.78rem;
+            word-break: break-all;
+            color: #334155;
+            max-height: 80px;
+            overflow-y: auto;
+            background: #ffffff;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+            margin-top: 6px;
+        }
+
+        .help-table {
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .help-table summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .help-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        .help-table th, .help-table td {
+            padding: 6px 8px;
+            border: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        .help-table th {
+            background: #f9fafb;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 16px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            background: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <span class="brand-badge">INACAP</span>
+            <span>Gestión de Talleres Extracurriculares</span>
+        </div>
+        <div class="header-links">
+            <a href="/api/">API Navegable</a>
+            <a href="/admin/">Panel Admin</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="card">
+            {% if usuario_logueado %}
+                <!-- VISTA DE SESIÓN INICIADA (EXITOSA) -->
+                <div class="card-header">
+                    <h1>Bienvenido(a)</h1>
+                    <p>{{ usuario_logueado.nombre_completo }}</p>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-success">
+                        <span>✔ Sesión iniciada correctamente mediante <strong>JWT</strong>.</span>
+                    </div>
+
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <span class="profile-badge badge-{{ usuario_logueado.rol|lower }}">
+                            Rol: {{ usuario_logueado.rol }}
+                        </span>
+                        <div style="font-size: 0.9rem; margin-top: 8px; color: var(--text);">
+                            <strong>RUT:</strong> {{ usuario_logueado.rut }} <br>
+                            <strong>Correo:</strong> {{ usuario_logueado.email }}
+                        </div>
+                    </div>
+
+                    <div class="token-box">
+                        <label style="margin-bottom: 2px;">Token JWT de Acceso (Access Token):</label>
+                        <div class="token-text" id="tokenBox">{{ token_access }}</div>
+                        <button type="button" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; margin-top: 6px;" onclick="copiarToken()">
+                            Copiar Token JWT
+                        </button>
+                    </div>
+
+                    <a href="/api/talleres/" class="btn">Explorar Catálogo de Talleres</a>
+                    <a href="/login/" class="btn btn-outline">Cerrar Sesión / Probar otro Usuario</a>
+                </div>
+            {% else %}
+                <!-- FORMULARIO VISUAL DE INGRESO (TIPO ADMIN) -->
+                <div class="card-header">
+                    <h1>Iniciar Sesión</h1>
+                    <p>Ingresa con tu RUT o Correo Institucional</p>
+                </div>
+                <div class="card-body">
+                    {% if error_mensaje %}
+                        <div class="alert alert-danger">
+                            <span>⚠ {{ error_mensaje }}</span>
+                        </div>
+                    {% endif %}
+
+                    <form method="POST" action="/login/">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="identificador">RUT o Correo Electrónico:</label>
+                            <input type="text" id="identificador" name="identificador" 
+                                   value="{{ valor_identificador|default:'' }}" 
+                                   placeholder="ej. 12101001-1 o admin@inacap.cl" required autofocus>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Contraseña:</label>
+                            <input type="password" id="password" name="password" 
+                                   placeholder="••••••••" required>
+                        </div>
+
+                        <button type="submit" class="btn">Iniciar Sesión</button>
+                    </form>
+
+                    <!-- ACORDEÓN DE AYUDA PARA LA DEFENSA FRENTE AL DOCENTE -->
+                    <details class="help-table">
+                        <summary>Ver cuentas y RUTs de prueba para la defensa</summary>
+                        <p style="margin-bottom: 6px;">Contraseña para todos: <strong>inacap123</strong></p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rol</th>
+                                    <th>Nombre</th>
+                                    <th>RUT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>ADMIN</strong></td>
+                                    <td>Administrador</td>
+                                    <td><code>99999999-9</code></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>JEFE</strong></td>
+                                    <td>Hernán Valenzuela</td>
+                                    <td><code>13101001-1</code></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>PROFESOR</strong></td>
+                                    <td>Roberto Morales</td>
+                                    <td><code>12101001-1</code></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ALUMNO</strong></td>
+                                    <td>Matías Silva</td>
+                                    <td><code>14101001-1</code></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ALUMNO</strong></td>
+                                    <td>Camila Martínez</td>
+                                    <td><code>11111111-1</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        Sistema de Programación Back End | INACAP 2026
+    </footer>
+
+    <script>
+        function copiarToken() {
+            const tokenText = document.getElementById('tokenBox').innerText;
+            navigator.clipboard.writeText(tokenText).then(() => {
+                alert('Token JWT copiado al portapapeles. Puedes usarlo en la cabecera Authorization: Bearer <token>');
+            });
+        }
+    </script>
+</body>
+</html>

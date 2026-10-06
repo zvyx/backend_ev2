@@ -6,6 +6,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.shortcuts import render
 
 from .models import Usuario, Sala, Taller, Inscripcion, Asistencia
 from .serializers import (
@@ -15,18 +16,35 @@ from .serializers import (
 from .permissions import EsAdmin, EsAdminOReadOnly, EsJefatura, EsProfesor
 
 
-# Endpoint para iniciar sesion con correo o RUT y obtener token JWT
+# Endpoint para iniciar sesion con correo o RUT y obtener token JWT (Soporta HTML y JSON)
 class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+    def get(self, request):
+        # Renderiza el formulario visual para el navegador (tipo Django Admin)
+        return render(request, 'talleres/login.html')
 
-        email_input = serializer.validated_data.get('email', '').strip()
-        rut_input = serializer.validated_data.get('rut', '').strip()
-        identificador = email_input or rut_input
-        password = serializer.validated_data['password']
+    def post(self, request):
+        # Determinar si la petición proviene de un formulario web HTML o de una API JSON
+        es_formulario_web = (
+            request.content_type in ['application/x-www-form-urlencoded', 'multipart/form-data'] or
+            request.headers.get('Sec-Fetch-Dest') == 'document' or
+            'identificador' in request.POST
+        )
+
+        identificador = (
+            request.data.get('identificador') or
+            request.data.get('email') or
+            request.data.get('rut') or
+            ''
+        ).strip()
+        password = request.data.get('password', '')
+
+        if not identificador or not password:
+            msg = "Debe ingresar su RUT o correo y contraseña."
+            if es_formulario_web:
+                return render(request, 'talleres/login.html', {'error_mensaje': msg}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Datos incompletos", "mensaje": msg}, status=status.HTTP_400_BAD_REQUEST)
 
         # 1. Buscar usuario por correo electrónico o por RUT
         usuario = Usuario.objects.filter(
@@ -34,15 +52,27 @@ class LoginView(APIView):
         ).first()
 
         if not usuario:
+            msg = "Usuario no existe, solicite su creación al administrador."
+            if es_formulario_web:
+                return render(request, 'talleres/login.html', {
+                    'error_mensaje': msg,
+                    'valor_identificador': identificador
+                }, status=status.HTTP_404_NOT_FOUND)
             return Response({
                 "error": "Usuario no encontrado",
-                "mensaje": "Usuario no existe, solicite su creación al administrador."
+                "mensaje": msg
             }, status=status.HTTP_404_NOT_FOUND)
 
         if not usuario.activo:
+            msg = "Tu cuenta está desactivada. Consulta con el administrador."
+            if es_formulario_web:
+                return render(request, 'talleres/login.html', {
+                    'error_mensaje': msg,
+                    'valor_identificador': identificador
+                }, status=status.HTTP_403_FORBIDDEN)
             return Response({
                 "error": "Usuario inactivo",
-                "mensaje": "Tu cuenta está desactivada. Consulta con el administrador."
+                "mensaje": msg
             }, status=status.HTTP_403_FORBIDDEN)
 
         # 2. Si el usuario no tiene cuenta en User de Django, se crea
@@ -56,9 +86,15 @@ class LoginView(APIView):
 
         # 3. Validar contrasena
         if not usuario.user.check_password(password):
+            msg = "Usuario no encontrado, verifique sus datos y vuelva a intentarlo."
+            if es_formulario_web:
+                return render(request, 'talleres/login.html', {
+                    'error_mensaje': msg,
+                    'valor_identificador': identificador
+                }, status=status.HTTP_400_BAD_REQUEST)
             return Response({
                 "error": "Credenciales inválidas",
-                "mensaje": "Usuario no encontrado, verifique sus datos y vuelva a intentarlo."
+                "mensaje": msg
             }, status=status.HTTP_400_BAD_REQUEST)
 
         # 4. Generar tokens JWT (Access y Refresh)
@@ -68,6 +104,14 @@ class LoginView(APIView):
         refresh['nombre'] = usuario.nombre_completo
 
         access_token = str(refresh.access_token)
+
+        # Si es formulario web, renderizar vista de bienvenida interactiva
+        if es_formulario_web:
+            return render(request, 'talleres/login.html', {
+                'usuario_logueado': usuario,
+                'token_access': access_token,
+                'token_refresh': str(refresh),
+            }, status=status.HTTP_200_OK)
 
         return Response({
             "access": access_token,
