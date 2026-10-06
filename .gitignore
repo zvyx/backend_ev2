@@ -24,6 +24,7 @@ __pycache__/
 *.md
 !README.md
 !GUIA_DESPLIEGUE_Y_PRUEBAS.md
+!GUIA_INSTALACION_Y_PRUEBAS.md
 
 # Scripts de pruebas locales y utilidades temporales
 test_live_api.py

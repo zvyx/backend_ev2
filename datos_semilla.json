@@ -148,7 +148,7 @@
   "pk": 9,
   "fields": {
     "password": "pbkdf2_sha256$1500000$wzhRBXnoncDNnHM0662Rrb$PT6XEcXoFOVzvSKhC5HqWdT5c4qWAAWkq9Jah23NEYw=",
-    "last_login": "2026-10-06T19:23:47.618Z",
+    "last_login": "2026-10-06T19:25:02.994Z",
     "is_superuser": false,
     "username": "roberto.morales",
     "first_name": "",
