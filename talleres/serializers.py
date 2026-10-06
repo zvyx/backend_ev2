@@ -25,10 +25,18 @@ class UsuarioSerializer(serializers.ModelSerializer):
         return usuario
 
 
-# Datos esperados para el login
+# Datos esperados para el login (admite correo electrónico o RUT)
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
+    email = serializers.CharField(required=False, allow_blank=True, default='')
+    rut = serializers.CharField(required=False, allow_blank=True, default='')
     password = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, attrs):
+        email = attrs.get('email', '').strip()
+        rut = attrs.get('rut', '').strip()
+        if not email and not rut:
+            raise serializers.ValidationError("Debe ingresar su correo electrónico o su RUT.")
+        return attrs
 
 
 # Serializador de salas

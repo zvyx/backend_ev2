@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 from .models import Usuario, Sala, Taller, Inscripcion, Asistencia
 from .serializers import (
@@ -14,7 +15,7 @@ from .serializers import (
 from .permissions import EsAdmin, EsAdminOReadOnly, EsJefatura, EsProfesor
 
 
-# Endpoint para iniciar sesion con el correo y obtener token JWT
+# Endpoint para iniciar sesion con correo o RUT y obtener token JWT
 class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -22,11 +23,16 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        email = serializer.validated_data['email'].strip().lower()
+        email_input = serializer.validated_data.get('email', '').strip()
+        rut_input = serializer.validated_data.get('rut', '').strip()
+        identificador = email_input or rut_input
         password = serializer.validated_data['password']
 
-        # 1. Buscar si el correo existe en la base de datos
-        usuario = Usuario.objects.filter(email__iexact=email).first()
+        # 1. Buscar usuario por correo electrónico o por RUT
+        usuario = Usuario.objects.filter(
+            Q(email__iexact=identificador) | Q(rut__iexact=identificador)
+        ).first()
+
         if not usuario:
             return Response({
                 "error": "Usuario no encontrado",
@@ -41,8 +47,8 @@ class LoginView(APIView):
 
         # 2. Si el usuario no tiene cuenta en User de Django, se crea
         if not usuario.user:
-            username = email.split('@')[0]
-            auth_user, _ = User.objects.get_or_create(username=username, defaults={'email': email})
+            username = usuario.email.split('@')[0]
+            auth_user, _ = User.objects.get_or_create(username=username, defaults={'email': usuario.email})
             auth_user.set_password(password)
             auth_user.save()
             usuario.user = auth_user
@@ -70,6 +76,7 @@ class LoginView(APIView):
             "usuario_id": usuario.id,
             "nombre_completo": usuario.nombre_completo,
             "email": usuario.email,
+            "rut": usuario.rut,
             "rol": usuario.rol,
             "mensaje": f"Bienvenido(a) {usuario.nombre_completo}"
         }, status=status.HTTP_200_OK)
@@ -79,6 +86,23 @@ class LoginView(APIView):
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all().order_by('nombre_completo')
     serializer_class = UsuarioSerializer
+
+    def get_queryset(self):
+        queryset = Usuario.objects.all().order_by('nombre_completo')
+        rut = self.request.query_params.get('rut')
+        if rut:
+            queryset = queryset.filter(rut__icontains=rut.strip())
+        rol = self.request.query_params.get('rol')
+        if rol:
+            queryset = queryset.filter(rol=rol.upper().strip())
+        buscar = self.request.query_params.get('buscar')
+        if buscar:
+            queryset = queryset.filter(
+                Q(nombre_completo__icontains=buscar) |
+                Q(email__icontains=buscar) |
+                Q(rut__icontains=buscar)
+            )
+        return queryset
 
     def get_permissions(self):
         # Crear, editar o borrar solo el admin
