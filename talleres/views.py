@@ -6,7 +6,8 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import logout
 
 from .models import Usuario, Sala, Taller, Inscripcion, Asistencia
 from .serializers import (
@@ -14,6 +15,19 @@ from .serializers import (
     InscripcionSerializer, AsistenciaSerializer, LoginSerializer
 )
 from .permissions import EsAdmin, EsAdminOReadOnly, EsJefatura, EsProfesor
+
+
+# Endpoint para cerrar sesion de Django (limpia cookies de sesion y vuelve a login)
+class LogoutView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        logout(request)
+        return redirect('/login/')
+
+    def post(self, request):
+        logout(request)
+        return redirect('/login/')
 
 
 # Endpoint para iniciar sesion con correo o RUT y obtener token JWT (Soporta HTML y JSON)

@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 from .views import (
     UsuarioViewSet, SalaViewSet, TallerViewSet,
-    InscripcionViewSet, AsistenciaViewSet, LoginView
+    InscripcionViewSet, AsistenciaViewSet, LoginView, LogoutView
 )
 
 # Router con endpoints CRUD
@@ -15,9 +15,10 @@ router.register(r'inscripciones', InscripcionViewSet, basename='inscripcion')
 router.register(r'asistencias', AsistenciaViewSet, basename='asistencia')
 
 urlpatterns = [
-    # Panel visual de ingreso (Navegador Web)
+    # Panel visual de ingreso y cierre de sesión (Navegador Web)
     path('', LoginView.as_view(), name='home'),
     path('login/', LoginView.as_view(), name='web_login'),
+    path('logout/', LogoutView.as_view(), name='web_logout'),
     # Autenticación JWT e ingreso para API (Postman / Clientes REST)
     path('api/login/', LoginView.as_view(), name='login'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
