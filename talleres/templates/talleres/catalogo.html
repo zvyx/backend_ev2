@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Talleres | INACAP</title>
+    <style>
+        :root {
+            --primary: #102c57;
+            --primary-dark: #0a1b36;
+            --secondary: #2980b9;
+            --accent: #e63946;
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-muted: #6c757d;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --warning-bg: #fffbeb;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .brand-badge {
+            background-color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .user-nav {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.9rem;
+        }
+
+        .user-nav a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .user-nav a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .btn-nav-logout {
+            background: rgba(255,255,255,0.15);
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: #fff !important;
+            text-decoration: none !important;
+        }
+
+        .btn-nav-logout:hover {
+            background: var(--accent);
+        }
+
+        main {
+            flex: 1;
+            max-width: 1100px;
+            width: 100%;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        /* Banner de usuario autenticado */
+        .user-banner {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .user-info h2 {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .user-meta {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .badge-rol {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-admin { background: #fee2e2; color: #991b1b; }
+        .badge-jefe { background: #ede9fe; color: #5b21b6; }
+        .badge-profesor { background: #dcfce7; color: #166534; }
+        .badge-alumno { background: #e0f2fe; color: #075985; }
+
+        /* Cuadro de Token */
+        .token-inline {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .token-inline code {
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .btn-copy {
+            background: var(--secondary);
+            color: #fff;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        .btn-copy:hover {
+            background: #1f618d;
+        }
+
+        /* Alertas */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background: var(--success-bg);
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        .alert-danger {
+            background: var(--danger-bg);
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        /* Secciones */
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Grilla de Talleres */
+        .talleres-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .taller-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .taller-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 44, 87, 0.08);
+        }
+
+        .taller-card h3 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .taller-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            flex: 1;
+        }
+
+        .taller-details {
+            border-top: 1px solid #f1f5f9;
+            padding-top: 12px;
+            margin-bottom: 16px;
+            font-size: 0.82rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .detail-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .detail-val {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .cupos-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .cupos-ok { background: var(--success-bg); color: #065f46; }
+        .cupos-full { background: var(--danger-bg); color: #991b1b; }
+
+        .btn-inscribir {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+            text-align: center;
+        }
+
+        .btn-inscribir:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-inscrito {
+            width: 100%;
+            padding: 10px;
+            background: var(--success-bg);
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            border-radius: 6px;
+            font-weight: 700;
+            text-align: center;
+            display: block;
+        }
+
+        .btn-cancelar {
+            width: 100%;
+            padding: 6px;
+            margin-top: 6px;
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid #fecaca;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .btn-cancelar:hover {
+            background: var(--danger-bg);
+        }
+
+        .btn-disabled {
+            width: 100%;
+            padding: 10px;
+            background: #e2e8f0;
+            color: #94a3b8;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: not-allowed;
+            text-align: center;
+        }
+
+        /* Tabla de inscripciones */
+        .table-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        th {
+            background: #f8fafc;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover td {
+            background: #fafafa;
+        }
+
+        .badge-estado {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .estado-activa { background: var(--success-bg); color: #065f46; }
+        .estado-solicitado { background: var(--warning-bg); color: #92400e; }
+
+        /* Botones de acción de jefatura */
+        .btn-aprobar {
+            background: var(--success);
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .btn-rechazar {
+            background: var(--danger);
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 6px;
+        }
+
+        footer {
+            background: #ffffff;
+            border-top: 1px solid var(--border);
+            padding: 16px;
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <span class="brand-badge">INACAP</span>
+            <span>Sistema de Talleres Extracurriculares</span>
+        </div>
+        <div class="user-nav">
+            <a href="/api/">API Navegable</a>
+            {% if usuario.rol == 'ADMIN' %}
+                <a href="/admin/">Panel Admin</a>
+            {% endif %}
+            <a href="/logout/" class="btn-nav-logout">Cerrar Sesión</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- BANNER DE IDENTIFICACIÓN -->
+        <div class="user-banner">
+            <div class="user-info">
+                <h2>{{ usuario.nombre_completo }}</h2>
+                <div class="user-meta">
+                    <span class="badge-rol badge-{{ usuario.rol|lower }}">Rol: {{ usuario.rol }}</span>
+                    <span><strong>RUT:</strong> {{ usuario.rut }}</span>
+                    <span><strong>Correo:</strong> {{ usuario.email }}</span>
+                </div>
+            </div>
+            <div class="token-inline">
+                <span>Token JWT:</span>
+                <code title="{{ token_access }}">{{ token_access|slice:":25" }}...</code>
+                <button class="btn-copy" onclick="copiarTokenCompleto('{{ token_access }}')">Copiar</button>
+            </div>
+        </div>
+
+        {% if mensaje_exito %}
+            <div class="alert alert-success">
+                <span>✔ {{ mensaje_exito }}</span>
+            </div>
+        {% endif %}
+
+        {% if mensaje_error %}
+            <div class="alert alert-danger">
+                <span>⚠ {{ mensaje_error }}</span>
+            </div>
+        {% endif %}
+
+        <!-- SI ES ALUMNO: MOSTRAR SUS INSCRIPCIONES -->
+        {% if usuario.rol == 'ALUMNO' and mis_inscripciones %}
+            <div class="section-title">
+                <span>Mis Inscripciones Activas ({{ mis_inscripciones.count }})</span>
+            </div>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Taller</th>
+                            <th>Docente</th>
+                            <th>Sala / Ubicación</th>
+                            <th>Fecha Inscripción</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ins in mis_inscripciones %}
+                            <tr>
+                                <td><strong>{{ ins.taller.nombre }}</strong></td>
+                                <td>{{ ins.taller.profesor.nombre_completo }}</td>
+                                <td>{{ ins.taller.sala.nombre }} ({{ ins.taller.sala.ubicacion|default:'S/U' }})</td>
+                                <td>{{ ins.fecha_inscripcion|date:"d/m/Y H:i" }}</td>
+                                <td><span class="badge-estado estado-activa">Activa</span></td>
+                                <td>
+                                    <form method="POST" action="/talleres/" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="accion" value="cancelar">
+                                        <input type="hidden" name="taller_id" value="{{ ins.taller.id }}">
+                                        <button type="submit" class="btn-cancelar" style="width:auto; padding:4px 10px;" onclick="return confirm('¿Seguro que deseas cancelar tu inscripción?');">Cancelar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        <!-- CATÁLOGO GENERAL DE TALLERES APROBADOS -->
+        <div class="section-title">
+            <span>Catálogo de Talleres Disponibles</span>
+            <span style="font-size:0.85rem; color:var(--text-muted); font-weight:normal;">Total disponibles: {{ talleres|length }}</span>
+        </div>
+
+        <div class="talleres-grid">
+            {% for t in talleres %}
+                <div class="taller-card">
+                    <div>
+                        <h3>{{ t.nombre }}</h3>
+                        <p class="taller-desc">{{ t.descripcion|default:"Sin descripción detallada." }}</p>
+                    </div>
+
+                    <div>
+                        <div class="taller-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Docente:</span>
+                                <span class="detail-val">{{ t.profesor }}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Sala Asignada:</span>
+                                <span class="detail-val">{{ t.sala }}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Disponibilidad de Cupos:</span>
+                                <span class="cupos-badge {% if t.lleno %}cupos-full{% else %}cupos-ok{% endif %}">
+                                    {{ t.total_inscritos }} / {{ t.cupo_maximo }} inscritos
+                                    {% if not t.lleno %} ({{ t.cupos_disponibles }} libres){% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        {% if usuario.rol == 'ALUMNO' %}
+                            {% if t.esta_inscrito %}
+                                <div class="btn-inscrito">✔ Ya estás inscrito</div>
+                                <form method="POST" action="/talleres/">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="accion" value="cancelar">
+                                    <input type="hidden" name="taller_id" value="{{ t.id }}">
+                                    <button type="submit" class="btn-cancelar" onclick="return confirm('¿Deseas desinscribirte de este taller?');">Desinscribirme</button>
+                                </form>
+                            {% elif t.lleno %}
+                                <div class="btn-disabled">Cupo Completo</div>
+                            {% else %}
+                                <form method="POST" action="/talleres/">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="accion" value="inscribir">
+                                    <input type="hidden" name="taller_id" value="{{ t.id }}">
+                                    <button type="submit" class="btn-inscribir">Inscribirme en este Taller</button>
+                                </form>
+                            {% endif %}
+                        {% else %}
+                            <div style="font-size:0.8rem; color:var(--text-muted); text-align:center;">
+                                (Solo alumnos pueden inscribirse)
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p style="grid-column: 1 / -1; color: var(--text-muted); text-align: center; padding: 32px;">
+                    No hay talleres aprobados en este momento.
+                </p>
+            {% endfor %}
+        </div>
+
+        <!-- SECCIÓN ESPECIAL PARA JEFATURA: APROBAR / RECHAZAR TALLERES -->
+        {% if usuario.rol in 'JEFE,ADMIN' and talleres_solicitados %}
+            <div class="section-title" style="margin-top: 32px;">
+                <span>Talleres Pendientes de Revisión por Jefatura</span>
+            </div>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Taller Solicitado</th>
+                            <th>Docente Solicitante</th>
+                            <th>Sala Solicitada</th>
+                            <th>Cupo Máximo</th>
+                            <th>Estado</th>
+                            <th>Acciones de Decisión</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ts in talleres_solicitados %}
+                            <tr>
+                                <td><strong>{{ ts.nombre }}</strong></td>
+                                <td>{{ ts.profesor.nombre_completo }}</td>
+                                <td>{{ ts.sala.nombre }}</td>
+                                <td>{{ ts.cupo_maximo }}</td>
+                                <td><span class="badge-estado estado-solicitado">Solicitado</span></td>
+                                <td>
+                                    <form method="POST" action="/talleres/" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="accion" value="aprobar">
+                                        <input type="hidden" name="taller_id" value="{{ ts.id }}">
+                                        <button type="submit" class="btn-aprobar">Aprobar</button>
+                                    </form>
+                                    <form method="POST" action="/talleres/" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="accion" value="rechazar">
+                                        <input type="hidden" name="taller_id" value="{{ ts.id }}">
+                                        <button type="submit" class="btn-rechazar">Rechazar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+    </main>
+
+    <footer>
+        Sistema de Talleres Extracurriculares | INACAP 2026
+    </footer>
+
+    <script>
+        function copiarTokenCompleto(token) {
+            navigator.clipboard.writeText(token).then(() => {
+                alert('Token JWT copiado al portapapeles.');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 from .views import (
     UsuarioViewSet, SalaViewSet, TallerViewSet,
-    InscripcionViewSet, AsistenciaViewSet, LoginView, LogoutView
+    InscripcionViewSet, AsistenciaViewSet, LoginView, LogoutView, CatalogoTalleresView
 )
 
 # Router con endpoints CRUD
@@ -19,6 +19,8 @@ urlpatterns = [
     path('', LoginView.as_view(), name='home'),
     path('login/', LoginView.as_view(), name='web_login'),
     path('logout/', LogoutView.as_view(), name='web_logout'),
+    # Catálogo web interactivo para alumnos, docentes y jefatura
+    path('talleres/', CatalogoTalleresView.as_view(), name='catalogo_talleres'),
     # Autenticación JWT e ingreso para API (Postman / Clientes REST)
     path('api/login/', LoginView.as_view(), name='login'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

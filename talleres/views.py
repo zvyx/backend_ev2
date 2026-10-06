@@ -7,7 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout
+from django.contrib.auth import logout, login as django_login
 
 from .models import Usuario, Sala, Taller, Inscripcion, Asistencia
 from .serializers import (
@@ -119,13 +119,12 @@ class LoginView(APIView):
 
         access_token = str(refresh.access_token)
 
-        # Si es formulario web, renderizar vista de bienvenida interactiva
+        # Si es formulario web, autenticar también la sesión de Django para navegación web fluida
         if es_formulario_web:
-            return render(request, 'talleres/login.html', {
-                'usuario_logueado': usuario,
-                'token_access': access_token,
-                'token_refresh': str(refresh),
-            }, status=status.HTTP_200_OK)
+            django_login(request, usuario.user)
+            request.session['jwt_access'] = access_token
+            # Redireccionar directamente al catálogo interactivo para una experiencia web intuitiva
+            return redirect('catalogo_talleres')
 
         return Response({
             "access": access_token,
@@ -138,6 +137,111 @@ class LoginView(APIView):
             "rol": usuario.rol,
             "mensaje": f"Bienvenido(a) {usuario.nombre_completo}"
         }, status=status.HTTP_200_OK)
+
+
+# Vista web interactiva para explorar el catálogo de talleres, inscribirse y gestionar estados
+class CatalogoTalleresView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get_perfil(self, request):
+        if request.user.is_authenticated:
+            return getattr(request.user, 'usuario', None)
+        return None
+
+    def get(self, request):
+        perfil = self.get_perfil(request)
+        if not perfil:
+            return redirect('web_login')
+
+        # Obtener talleres aprobados
+        talleres_aprobados = Taller.objects.filter(estado='aprobado').select_related('profesor', 'sala').order_by('nombre')
+        
+        # Enriquecer información de cada taller con cupos e inscripción del usuario actual
+        talleres_info = []
+        mis_inscripciones = []
+        if perfil.rol == 'ALUMNO':
+            mis_inscripciones = Inscripcion.objects.filter(alumno=perfil, estado='activa').select_related('taller')
+            talleres_inscritos_ids = set(mis_inscripciones.values_list('taller_id', flat=True))
+        else:
+            talleres_inscritos_ids = set()
+
+        for t in talleres_aprobados:
+            inscritos_count = t.inscripciones.filter(estado='activa').count()
+            talleres_info.append({
+                'id': t.id,
+                'nombre': t.nombre,
+                'descripcion': t.descripcion,
+                'profesor': t.profesor,
+                'sala': t.sala,
+                'cupo_maximo': t.cupo_maximo,
+                'total_inscritos': inscritos_count,
+                'cupos_disponibles': max(0, t.cupo_maximo - inscritos_count),
+                'lleno': inscritos_count >= t.cupo_maximo,
+                'esta_inscrito': t.id in talleres_inscritos_ids,
+            })
+
+        # Si es jefatura o admin, obtener talleres en estado solicitado para aprobación/rechazo
+        talleres_solicitados = []
+        if perfil.rol in ['JEFE', 'ADMIN']:
+            talleres_solicitados = Taller.objects.filter(estado='solicitado').select_related('profesor', 'sala')
+
+        jwt_token = request.session.get('jwt_access', '')
+
+        return render(request, 'talleres/catalogo.html', {
+            'usuario': perfil,
+            'talleres': talleres_info,
+            'mis_inscripciones': mis_inscripciones,
+            'talleres_solicitados': talleres_solicitados,
+            'jwt_token': jwt_token,
+        })
+
+    def post(self, request):
+        perfil = self.get_perfil(request)
+        if not perfil:
+            return redirect('web_login')
+
+        accion = request.POST.get('accion')
+        taller_id = request.POST.get('taller_id')
+        msg_exito = None
+        msg_error = None
+
+        if accion == 'inscribir' and perfil.rol == 'ALUMNO':
+            taller = Taller.objects.filter(id=taller_id, estado='aprobado').first()
+            if not taller:
+                msg_error = "El taller no existe o no se encuentra disponible para inscripción."
+            elif taller.inscripciones.filter(estado='activa').count() >= taller.cupo_maximo:
+                msg_error = "Lo sentimos, el taller no cuenta con cupos disponibles."
+            elif Inscripcion.objects.filter(alumno=perfil, taller=taller, estado='activa').exists():
+                msg_error = "Ya estás inscrito en este taller."
+            else:
+                Inscripcion.objects.create(alumno=perfil, taller=taller, estado='activa')
+                msg_exito = f"¡Te has inscrito exitosamente en el taller '{taller.nombre}'!"
+
+        elif accion == 'cancelar' and perfil.rol == 'ALUMNO':
+            inscripcion = Inscripcion.objects.filter(alumno=perfil, taller_id=taller_id, estado='activa').first()
+            if inscripcion:
+                inscripcion.estado = 'cancelada'
+                inscripcion.save()
+                msg_exito = "Inscripción cancelada correctamente."
+            else:
+                msg_error = "No se encontró una inscripción activa en este taller."
+
+        elif accion == 'aprobar' and perfil.rol in ['JEFE', 'ADMIN']:
+            taller = Taller.objects.filter(id=taller_id, estado='solicitado').first()
+            if taller:
+                taller.estado = 'aprobado'
+                taller.save()
+                msg_exito = f"Taller '{taller.nombre}' aprobado con éxito."
+
+        elif accion == 'rechazar' and perfil.rol in ['JEFE', 'ADMIN']:
+            taller = Taller.objects.filter(id=taller_id, estado='solicitado').first()
+            if taller:
+                taller.estado = 'rechazado'
+                taller.save()
+                msg_exito = f"Taller '{taller.nombre}' rechazado."
+
+        # Redirigir de vuelta a la vista GET del catálogo
+        return redirect('catalogo_talleres')
 
 
 # CRUD de usuarios (solo admin puede crear o modificar)
