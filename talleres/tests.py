@@ -42,31 +42,41 @@ class SistemaTalleresEvaluacion3Tests(TestCase):
         )
 
     def test_login_usuario_no_enrolado(self):
-        """Verifica que un correo no registrado devuelva 404 con mensaje de elevar al admin."""
+        """Verifica que un correo no registrado devuelva 404 con mensaje simple."""
         response = self.client.post('/api/login/', {
             'email': 'fantasma@inacap.cl',
             'password': 'password123'
         }, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertIn("eleve una solicitud a Administración", response.data['mensaje'])
+        self.assertEqual(response.data['mensaje'], "Usuario no existe, solicite su creación al administrador.")
 
-    def test_login_usuario_exitoso_y_token(self):
-        """Verifica que un usuario existente reciba su Token DRF y rol."""
+    def test_login_password_incorrecta(self):
+        """Verifica que contraseña incorrecta devuelva 400 con mensaje simple."""
+        response = self.client.post('/api/login/', {
+            'email': 'profe@inacap.cl',
+            'password': 'password_incorrecta'
+        }, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['mensaje'], "Usuario no encontrado, verifique sus datos y vuelva a intentarlo.")
+
+    def test_login_usuario_exitoso_y_token_jwt(self):
+        """Verifica que un usuario existente reciba sus tokens JWT (access y refresh) y rol."""
         response = self.client.post('/api/login/', {
             'email': 'profe@inacap.cl',
             'password': 'password123'
         }, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('token', response.data)
+        self.assertIn('access', response.data)
+        self.assertIn('refresh', response.data)
         self.assertEqual(response.data['rol'], 'PROFESOR')
 
     def test_creacion_sala_solo_por_admin(self):
         """Un alumno no puede crear salas (403), solo el Administrador (201)."""
         # Login como Alumno
         login_res = self.client.post('/api/login/', {'email': 'alumno@inacap.cl', 'password': 'password123'})
-        token_alumno = login_res.data['token']
+        token_alumno = login_res.data['access']
 
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token_alumno)
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token_alumno)
         res_fallida = self.client.post('/api/salas/', {
             'nombre': 'Sala 202', 'codigo': 'S-202', 'capacidad_maxima': 15, 'disponible': True
         })
@@ -74,9 +84,9 @@ class SistemaTalleresEvaluacion3Tests(TestCase):
 
         # Login como Admin
         login_res = self.client.post('/api/login/', {'email': 'admin@inacap.cl', 'password': 'password123'})
-        token_admin = login_res.data['token']
+        token_admin = login_res.data['access']
 
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token_admin)
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token_admin)
         res_exitosa = self.client.post('/api/salas/', {
             'nombre': 'Sala 202', 'codigo': 'S-202', 'capacidad_maxima': 15, 'disponible': True
         })
@@ -86,7 +96,7 @@ class SistemaTalleresEvaluacion3Tests(TestCase):
         """Un docente no puede enrolar usuarios (403), solo el Admin (201)."""
         # Docente intenta enrolar
         login_res = self.client.post('/api/login/', {'email': 'profe@inacap.cl', 'password': 'password123'})
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + login_res.data['token'])
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + login_res.data['access'])
         res_fallida = self.client.post('/api/usuarios/', {
             'nombre_completo': 'Nuevo Alumno', 'email': 'nuevo@inacap.cl', 'rut': '5-5', 'rol': 'ALUMNO'
         })
@@ -94,7 +104,7 @@ class SistemaTalleresEvaluacion3Tests(TestCase):
 
         # Admin enrola
         login_res = self.client.post('/api/login/', {'email': 'admin@inacap.cl', 'password': 'password123'})
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + login_res.data['token'])
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + login_res.data['access'])
         res_exitosa = self.client.post('/api/usuarios/', {
             'nombre_completo': 'Nuevo Alumno', 'email': 'nuevo@inacap.cl', 'rut': '5-5', 'rol': 'ALUMNO'
         })
@@ -104,7 +114,7 @@ class SistemaTalleresEvaluacion3Tests(TestCase):
         """Docente solicita taller (estado='solicitado'), Jefatura lo aprueba y pasa a 'aprobado'."""
         # 1. Docente solicita taller
         login_res = self.client.post('/api/login/', {'email': 'profe@inacap.cl', 'password': 'password123'})
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + login_res.data['token'])
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + login_res.data['access'])
 
         res_taller = self.client.post('/api/talleres/', {
             'nombre': 'Taller de Python Avanzado',
@@ -119,19 +129,19 @@ class SistemaTalleresEvaluacion3Tests(TestCase):
 
         # 2. Alumno intenta aprobar (403)
         login_alumno = self.client.post('/api/login/', {'email': 'alumno@inacap.cl', 'password': 'password123'})
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + login_alumno.data['token'])
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + login_alumno.data['access'])
         res_aprobar_alumno = self.client.post(f'/api/talleres/{taller_id}/aprobar/')
         self.assertEqual(res_aprobar_alumno.status_code, status.HTTP_403_FORBIDDEN)
 
         # 3. Jefatura aprueba el taller (200)
         login_jefe = self.client.post('/api/login/', {'email': 'jefe@inacap.cl', 'password': 'password123'})
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + login_jefe.data['token'])
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + login_jefe.data['access'])
         res_aprobar_jefe = self.client.post(f'/api/talleres/{taller_id}/aprobar/')
         self.assertEqual(res_aprobar_jefe.status_code, status.HTTP_200_OK)
         self.assertEqual(res_aprobar_jefe.data['taller']['estado'], 'aprobado')
 
         # 4. Alumno se inscribe exitosamente ahora que está aprobado
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + login_alumno.data['token'])
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + login_alumno.data['access'])
         res_inscribir = self.client.post('/api/inscripciones/', {
             'taller': taller_id
         })

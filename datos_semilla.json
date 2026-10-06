@@ -1,5 +1,527 @@
 [
 {
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$PwnG3eD2KSlwLyoFB7UWSV$Nm3YxzEP8JRNRK6aCJFDrX8gAk6eWBehO5HL4AMcxPI=",
+    "last_login": "2026-09-22T00:51:10.832Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@admin.cl",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-09-20T22:34:54.547Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$RxIUI23fz54dMm9fMaO9Mn$b6hVO4BMURPffHjuwz7XHAcnYFA8YCNuTGAlMuvasU0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "camila.martinez",
+    "first_name": "",
+    "last_name": "",
+    "email": "camila.martinez@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T01:52:06.592Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$Xpi2xc7tdb2fUjneziVom9$p/Bad0QgqwVMPj8zNgInwlbpUyF4lzwHQudHpyIeXEU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "liliana.arias",
+    "first_name": "",
+    "last_name": "",
+    "email": "liliana.arias@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T01:52:07.516Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$cKczRTlWiWcnhrBKJBhTtS$vTvgayIoeAS3cDxUjst/cQaYM68c2czuOlFNmdB1IgE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "johan.ortega",
+    "first_name": "",
+    "last_name": "",
+    "email": "johan.ortega@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T01:52:08.438Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$0QnRkWS7slIbR6KGp4ZZwk$Brq7QGUDugxUdq22oPiNq3GjI25zGmrOsF2hzHoSDzU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "cristian.romero",
+    "first_name": "",
+    "last_name": "",
+    "email": "cristian.romero@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T01:52:09.339Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$ri5ZboOMMpZJcud8BNLjv1$ecSI/kiTVmGb/3sRifjpD5IJZb04b349tJf1+ed2A5c=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "edgar.lopez",
+    "first_name": "",
+    "last_name": "",
+    "email": "edgar.lopez@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T01:52:10.300Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$dotESAEocQFTNKP9eC0wOi$FaSsgjY49Dv6Lf9Qpqmsvvwbcdg3ae7xGLSuJINgRiY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "eugenio.bravo",
+    "first_name": "",
+    "last_name": "",
+    "email": "eugenio.bravo@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T01:52:11.234Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$PRgThdkjmDDGBxjNA8ROsz$Lewn8EjDEBWnjDRlA2YNaqM3JVnwamLNKUK4vDdcMPc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "brigido",
+    "first_name": "",
+    "last_name": "",
+    "email": "brigido@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T01:52:12.185Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 9,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$wzhRBXnoncDNnHM0662Rrb$PT6XEcXoFOVzvSKhC5HqWdT5c4qWAAWkq9Jah23NEYw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "roberto.morales",
+    "first_name": "",
+    "last_name": "",
+    "email": "roberto.morales@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:02.967Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 10,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$YMIDYHwLG49xypCKcIl6ms$ykPVIV8LO/NYUuP3nhUf7qP/I45S4H1J4Y83Xpz4ZG8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "marcela.fuentes",
+    "first_name": "",
+    "last_name": "",
+    "email": "marcela.fuentes@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:03.873Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 11,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$MIvS1vvwV0tSKu8ZMiwgnE$ZpyV4234Ks33Lo5sKUF3jcwu/bckMoDitMlbNuynh1s=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "rodrigo.soto",
+    "first_name": "",
+    "last_name": "",
+    "email": "rodrigo.soto@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:04.756Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 12,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$t77wvt2w4CrVqDaw9CbJVz$AOnnDwaesuyiVYR+bxYnKFOauwFRTNVbRVSluFtBFyg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "patricia.castillo",
+    "first_name": "",
+    "last_name": "",
+    "email": "patricia.castillo@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:05.637Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 13,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$CRESaX457yWD12s27L5Mnt$baKJFYG/+ldpW3v2AhO8zLmWuCLl6kKkZXaVBmac31s=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "gonzalo.vergara",
+    "first_name": "",
+    "last_name": "",
+    "email": "gonzalo.vergara@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:06.515Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 14,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$qQJJjVO9H6FixUSqVxFotY$8Hhu+mXZA7UinGeY6E5fdHNP2OiCh4lV53JC5nmrGbA=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "andrea.sepulveda",
+    "first_name": "",
+    "last_name": "",
+    "email": "andrea.sepulveda@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:07.400Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 15,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$BijaEY4iGBmFsGdC4SwkMi$ElxoESFNctrA2VN5ZcSAp9rEvW2QfoVv4M50/8kf4kw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "felipe.herrera",
+    "first_name": "",
+    "last_name": "",
+    "email": "felipe.herrera@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:08.285Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 16,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$9nEMmjajTobWJCqe6BoYFH$2FOry1WbZHoiKzQTsGTyGGqVFh/RFSLX3lefIEbl+GA=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "claudia.navas",
+    "first_name": "",
+    "last_name": "",
+    "email": "claudia.navas@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:09.181Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 17,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$EiMXPrUTrjTaOsO1BX3GFS$AjcJK97pypxvWirr+CVZqPlQpH69QD7A3197i5I2JoM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "mauricio.carrasco",
+    "first_name": "",
+    "last_name": "",
+    "email": "mauricio.carrasco@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:10.073Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 18,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$jecWjnqvr6spsMcz0rewj4$rNB6gjSO5NBMPCZ0G1Lg8BIUSnBjiEer9MOT6X6YRKU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "daniela.riquelme",
+    "first_name": "",
+    "last_name": "",
+    "email": "daniela.riquelme@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:10.957Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 19,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$XTHV3MOkWNmUmHEI8yM4Ra$t2TLsgdxvoDIiCY6oZLL32y8OVI1Ejyb4mERiy/5OtE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "hernan.valenzuela",
+    "first_name": "",
+    "last_name": "",
+    "email": "hernan.valenzuela@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:11.841Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 20,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$MGogthwgsrcnYK2QlJQ1YG$hXW4DFfKKVu5LqcqzAsSMpTUu4xzfc8VkDPakHxRALY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "matias.silva",
+    "first_name": "",
+    "last_name": "",
+    "email": "matias.silva@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:12.724Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 21,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$vtto37JGsWp1dZ804vvjhu$jQUcu6lo6TKcCiyQU2F1H0W/NXLxBL3gqdpBJyV0T34=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "valentina.castro",
+    "first_name": "",
+    "last_name": "",
+    "email": "valentina.castro@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:13.604Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 22,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$uGbfZ6ivd50XrYbvGwsMBd$gUIZLONh85rlpfrV2BEFZ7JBuMgXLTcACrVo2cOKIQ4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "nicolas.gomez",
+    "first_name": "",
+    "last_name": "",
+    "email": "nicolas.gomez@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:14.528Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 23,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$5ZNKmB3p9dBV8fwdOPzy9u$YxALu9lM3i6Ex6QL/IynqYVr8pUhv5JrrtPhYfaAEA0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sofia.araya",
+    "first_name": "",
+    "last_name": "",
+    "email": "sofia.araya@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:15.413Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 24,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$XjWXyT6szVtimVAF6FMVLS$cN3fhQgL+gfIS9rPyZp7lJV8jmkLmOMmhzOqQHkr6tI=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "lucas.espinoza",
+    "first_name": "",
+    "last_name": "",
+    "email": "lucas.espinoza@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:16.292Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 25,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$HhtSEegmWGeDuRIbiANGce$UOStNC61+xpvClb7XZQJva0fZoFyiKsfBSz66YqFsh0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "martina.rojas",
+    "first_name": "",
+    "last_name": "",
+    "email": "martina.rojas@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:17.172Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 26,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$Ca9r7CKh30z3zeLn8iK37J$ZSXqdohNRe9kk2OKlsFftN3e4oNx887dB0nC6ndWMy4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "benjamin.flores",
+    "first_name": "",
+    "last_name": "",
+    "email": "benjamin.flores@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:18.050Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 27,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$MnE5o5JbguCnt2cC9ZPDoF$v0rm6BsesCB0myeNghtupN6QxbUXcVVM6eBlI+fQYZk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "isidora.vera",
+    "first_name": "",
+    "last_name": "",
+    "email": "isidora.vera@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:18.931Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 28,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$GwPvq0P6xIrtfe3y7ANbDk$/Owlj4EEB/0A4XeB4PYdJB3KKAZ7BSFLsXNGot13wBM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "tomas.perez",
+    "first_name": "",
+    "last_name": "",
+    "email": "tomas.perez@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:19.819Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 29,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$EUaX1DzlJvGdJLotTKbkHz$BrNxXYwcjQVfq/HNbk1QR2uHr1lqoDqesmwBZBOvUzY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "fernanda.munoz",
+    "first_name": "",
+    "last_name": "",
+    "email": "fernanda.munoz@inacap.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-06T02:22:20.712Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
   "model": "talleres.usuario",
   "pk": 1,
   "fields": {
@@ -416,7 +938,7 @@
     "nombre": "Laboratorio de Redes",
     "codigo": "LAB-REDES-99",
     "capacidad_maxima": 24,
-    "ubicacion": "Pabellón B",
+    "ubicacion": "Sala B",
     "disponible": true
   }
 },
@@ -427,7 +949,7 @@
     "nombre": "Laboratorio de Redes",
     "codigo": "LAB-1791252652",
     "capacidad_maxima": 24,
-    "ubicacion": "Pabellón B",
+    "ubicacion": "Sala B",
     "disponible": true
   }
 },
@@ -438,7 +960,7 @@
     "nombre": "Laboratorio de Redes",
     "codigo": "LAB-1791252938",
     "capacidad_maxima": 24,
-    "ubicacion": "Pabellón B",
+    "ubicacion": "Sala B",
     "disponible": true
   }
 },
@@ -636,560 +1158,6 @@
     "fecha_sesion": "2026-09-21",
     "presente": true,
     "observacion": ""
-  }
-},
-{
-  "model": "authtoken.token",
-  "pk": "8088b4fa4ceadb9f5aa4a045fcac3e8ac25ac164",
-  "fields": {
-    "user": 2,
-    "created": "2026-10-06T02:07:01.928Z"
-  }
-},
-{
-  "model": "authtoken.token",
-  "pk": "9062a0efc77deafff2599c632ce2a18267aeea19",
-  "fields": {
-    "user": 1,
-    "created": "2026-10-06T02:07:22.171Z"
-  }
-},
-{
-  "model": "authtoken.token",
-  "pk": "98e1bf7f2b0d29fdcff99573b3f5b240250f2af9",
-  "fields": {
-    "user": 7,
-    "created": "2026-10-06T02:07:02.818Z"
-  }
-},
-{
-  "model": "authtoken.token",
-  "pk": "ace034fc8e4bf72ea303071b2cba72d687545b3e",
-  "fields": {
-    "user": 6,
-    "created": "2026-10-06T02:07:01.036Z"
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 1,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$PwnG3eD2KSlwLyoFB7UWSV$Nm3YxzEP8JRNRK6aCJFDrX8gAk6eWBehO5HL4AMcxPI=",
-    "last_login": "2026-09-22T00:51:10.832Z",
-    "is_superuser": true,
-    "username": "admin",
-    "first_name": "",
-    "last_name": "",
-    "email": "admin@admin.cl",
-    "is_staff": true,
-    "is_active": true,
-    "date_joined": "2026-09-20T22:34:54.547Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 2,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$RxIUI23fz54dMm9fMaO9Mn$b6hVO4BMURPffHjuwz7XHAcnYFA8YCNuTGAlMuvasU0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "camila.martinez",
-    "first_name": "",
-    "last_name": "",
-    "email": "camila.martinez@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T01:52:06.592Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 3,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$Xpi2xc7tdb2fUjneziVom9$p/Bad0QgqwVMPj8zNgInwlbpUyF4lzwHQudHpyIeXEU=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "liliana.arias",
-    "first_name": "",
-    "last_name": "",
-    "email": "liliana.arias@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T01:52:07.516Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 4,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$cKczRTlWiWcnhrBKJBhTtS$vTvgayIoeAS3cDxUjst/cQaYM68c2czuOlFNmdB1IgE=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "johan.ortega",
-    "first_name": "",
-    "last_name": "",
-    "email": "johan.ortega@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T01:52:08.438Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 5,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$0QnRkWS7slIbR6KGp4ZZwk$Brq7QGUDugxUdq22oPiNq3GjI25zGmrOsF2hzHoSDzU=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "cristian.romero",
-    "first_name": "",
-    "last_name": "",
-    "email": "cristian.romero@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T01:52:09.339Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 6,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$ri5ZboOMMpZJcud8BNLjv1$ecSI/kiTVmGb/3sRifjpD5IJZb04b349tJf1+ed2A5c=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "edgar.lopez",
-    "first_name": "",
-    "last_name": "",
-    "email": "edgar.lopez@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T01:52:10.300Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 7,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$dotESAEocQFTNKP9eC0wOi$FaSsgjY49Dv6Lf9Qpqmsvvwbcdg3ae7xGLSuJINgRiY=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "eugenio.bravo",
-    "first_name": "",
-    "last_name": "",
-    "email": "eugenio.bravo@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T01:52:11.234Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 8,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$PRgThdkjmDDGBxjNA8ROsz$Lewn8EjDEBWnjDRlA2YNaqM3JVnwamLNKUK4vDdcMPc=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "brigido",
-    "first_name": "",
-    "last_name": "",
-    "email": "brigido@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T01:52:12.185Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 9,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$YCYlNeZL0XVyRkJugd1RrN$N+vsOoFOcayZXFQWZIcZcMLQGZq1zra1lJ9EGH5Rlvs=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "roberto.morales",
-    "first_name": "",
-    "last_name": "",
-    "email": "roberto.morales@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:02.967Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 10,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$LVZzCsxlGt72temXQPEyin$EcIrYobVy3+cAoxHR9X7o+NwZhwry5AZBu4x5iB2nlY=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "marcela.fuentes",
-    "first_name": "",
-    "last_name": "",
-    "email": "marcela.fuentes@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:03.873Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 11,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$X0RD775fm5Kr6JGYB3ZY5l$rDVepCiyuLIKvg25Ltnk1tLb8wOuZrXmGG8835P77LM=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "rodrigo.soto",
-    "first_name": "",
-    "last_name": "",
-    "email": "rodrigo.soto@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:04.756Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 12,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$bJ11RRLcc0l4ZCI9bAXSOT$I4NocozMWKt39dMToqFSzH5L0HVZ2iXAvN6Lcbqrdqg=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "patricia.castillo",
-    "first_name": "",
-    "last_name": "",
-    "email": "patricia.castillo@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:05.637Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 13,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$6QtT3apGOLw6phWbANKWsD$6oN0/z43qFfDVjUg5uF/Lm8IWvBZx858zQ+XLH80uKw=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "gonzalo.vergara",
-    "first_name": "",
-    "last_name": "",
-    "email": "gonzalo.vergara@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:06.515Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 14,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$QwDVp6aZzXuLbBA0mI3Xko$OZ85vZbUujiyMIxLHATBMfMUDvtppkQx4k81BlbB6Mk=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "andrea.sepulveda",
-    "first_name": "",
-    "last_name": "",
-    "email": "andrea.sepulveda@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:07.400Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 15,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$Q8dUfnlwLiFNAJH0lBREN4$y2wvh8n8XvDntUbSZB744Rzgs5keP1HK7CJ4OWpudDk=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "felipe.herrera",
-    "first_name": "",
-    "last_name": "",
-    "email": "felipe.herrera@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:08.285Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 16,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$2LyycD8ujfKPqNYTLkoDRE$1TvOsYJe/s0HgCJv5OX+Sxb0f9QKsmzjtU1bp5bzavc=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "claudia.navas",
-    "first_name": "",
-    "last_name": "",
-    "email": "claudia.navas@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:09.181Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 17,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$pWmfzVLssMnNK0gsmYbnDW$P5ckwWTNqUgiQ9Viz0trHYO7LWvmoCfaENRwkaRYSq0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "mauricio.carrasco",
-    "first_name": "",
-    "last_name": "",
-    "email": "mauricio.carrasco@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:10.073Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 18,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$KcYXgeHuZ3nG2IRFSJ5dZY$gFFPLstJc0GNZvWvvMa9PnfmldCin/I7VsIaPluaQJQ=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "daniela.riquelme",
-    "first_name": "",
-    "last_name": "",
-    "email": "daniela.riquelme@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:10.957Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 19,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$uXSLrt42xe7Pk0ts3pFv1C$UXDbIZAJxzC0KF65TDB5mJo0xFoPKLAT4U+cYcHQgMY=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "hernan.valenzuela",
-    "first_name": "",
-    "last_name": "",
-    "email": "hernan.valenzuela@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:11.841Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 20,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$ZjvlBnEgpDXsK3rPh5ULXB$d4pbWYj/8itJyO7TaDBFpzGj3atuuP5ni9l83p6blvs=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "matias.silva",
-    "first_name": "",
-    "last_name": "",
-    "email": "matias.silva@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:12.724Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 21,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$xv8LcY9xDsUcSPCwa7CNuD$nq7oRmPLUZUE1G8ThyGz1fdQrmlHBk/QyR+fs0H5B2s=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "valentina.castro",
-    "first_name": "",
-    "last_name": "",
-    "email": "valentina.castro@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:13.604Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 22,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$AAjHvWbLXxmM5DQn25cB0W$qwEJRapStcIS+r79x8r0wAkPSd9kePwQ/m8+eGlPMvU=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "nicolas.gomez",
-    "first_name": "",
-    "last_name": "",
-    "email": "nicolas.gomez@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:14.528Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 23,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$u5CoHWhOnZjPHWSVbpdRmf$gwdAN3ngJHmNoIKXRtpeP+iSNh+5R8Z5zfIHm3csPUc=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "sofia.araya",
-    "first_name": "",
-    "last_name": "",
-    "email": "sofia.araya@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:15.413Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 24,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$FIwvGd3mtMZT6gqNDNCWeF$O5k2KV3jh1++XwTY4PZB+5u2eLsLncrwbal6Kd+hbXk=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "lucas.espinoza",
-    "first_name": "",
-    "last_name": "",
-    "email": "lucas.espinoza@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:16.292Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 25,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$HfXyLrg4RG0AemQRBSxWsc$QOWJl3afva6HNig4NOE+VaYxhrx/qkgtogn+TUQIjLk=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "martina.rojas",
-    "first_name": "",
-    "last_name": "",
-    "email": "martina.rojas@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:17.172Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 26,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$8zGusR5luaMB1AcjiczZBC$H1jw6uNwlk/9VWxZs7cNlcoRSHUrY/+WuadrEdoZCBE=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "benjamin.flores",
-    "first_name": "",
-    "last_name": "",
-    "email": "benjamin.flores@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:18.050Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 27,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$0RDiNyASp0ziw1I2qgQZYy$tf25ViKyNBIaM5fMc/K23wmsM9RQz8Mr2B637fUpAVs=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "isidora.vera",
-    "first_name": "",
-    "last_name": "",
-    "email": "isidora.vera@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:18.931Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 28,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$DX9Eou8ClIrtVxqgIlWRuP$aZ8KOg1y3krEhPQjpjsfVX37cgo6WbIUgQiND59/tBI=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "tomas.perez",
-    "first_name": "",
-    "last_name": "",
-    "email": "tomas.perez@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:19.819Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 29,
-  "fields": {
-    "password": "pbkdf2_sha256$1500000$UpyCS0ieH297gMruwIJsvJ$z01YCWV4n0hET+cpI0c8tSWSnMn0GQsBM/YfZeBGwqY=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "fernanda.munoz",
-    "first_name": "",
-    "last_name": "",
-    "email": "fernanda.munoz@inacap.cl",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2026-10-06T02:22:20.712Z",
-    "groups": [],
-    "user_permissions": []
   }
 }
 ]

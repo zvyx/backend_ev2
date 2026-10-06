@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
 from .models import Usuario, Sala, Taller, Inscripcion, Asistencia
@@ -14,7 +14,7 @@ from .serializers import (
 from .permissions import EsAdmin, EsAdminOReadOnly, EsJefatura, EsProfesor
 
 
-# Endpoint para iniciar sesion con el correo
+# Endpoint para iniciar sesion con el correo y obtener token JWT
 class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -29,8 +29,8 @@ class LoginView(APIView):
         usuario = Usuario.objects.filter(email__iexact=email).first()
         if not usuario:
             return Response({
-                "error": "Usuario no enrolado",
-                "mensaje": "El correo ingresado no se encuentra registrado en el sistema. Por favor, eleve una solicitud a Administración para ser enrolado."
+                "error": "Usuario no encontrado",
+                "mensaje": "Usuario no existe, solicite su creación al administrador."
             }, status=status.HTTP_404_NOT_FOUND)
 
         if not usuario.activo:
@@ -51,15 +51,22 @@ class LoginView(APIView):
         # 3. Validar contrasena
         if not usuario.user.check_password(password):
             return Response({
-                "error": "Credenciales incorrectas",
-                "mensaje": "La contraseña ingresada no es válida."
+                "error": "Credenciales inválidas",
+                "mensaje": "Usuario no encontrado, verifique sus datos y vuelva a intentarlo."
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        # 4. Obtener o crear el token de autenticacion
-        token, _ = Token.objects.get_or_create(user=usuario.user)
+        # 4. Generar tokens JWT (Access y Refresh)
+        refresh = RefreshToken.for_user(usuario.user)
+        refresh['rol'] = usuario.rol
+        refresh['email'] = usuario.email
+        refresh['nombre'] = usuario.nombre_completo
+
+        access_token = str(refresh.access_token)
 
         return Response({
-            "token": token.key,
+            "access": access_token,
+            "refresh": str(refresh),
+            "token": access_token,
             "usuario_id": usuario.id,
             "nombre_completo": usuario.nombre_completo,
             "email": usuario.email,

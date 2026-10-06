@@ -76,7 +76,7 @@ Antes de iniciar la presentación frente al profesor, puedes demostrar que todo 
 ```powershell
 python manage.py test
 ```
-**Resultado esperado:** `Ran 5 tests ... OK` (Valida permisos, tokens, bloqueo a no enrolados y flujo de talleres).
+**Resultado esperado:** `Ran 6 tests ... OK` (Valida permisos, tokens JWT, bloqueo a usuarios no registrados y flujo de talleres).
 
 ---
 
@@ -101,7 +101,7 @@ La API navegable de DRF estará disponible en:
 **Contraseña unificada para todas las cuentas de prueba:** `inacap123`
 
 | Rol | Nombre | Correo Electrónico (Login) | Contraseña |
-| :--- | :--- | :--- | :---: |
+| :--- | :--- | :--- | :--- |
 | **ADMIN** | Administrador General | `admin@inacap.cl` | `inacap123` |
 | **JEFE** | Hernán Valenzuela | `hernan.valenzuela@inacap.cl` | `inacap123` |
 | **PROFESOR** | Roberto Morales | `roberto.morales@inacap.cl` | `inacap123` |
@@ -123,13 +123,13 @@ La API navegable de DRF estará disponible en:
   ```json
   {
     "detail": "Debes iniciar sesión con tu correo para acceder al sistema.",
-    "mensaje": "No has iniciado sesión. Ingresa en /api/login/ con tu correo para obtener tu token."
+    "mensaje": "No has iniciado sesión o tu token JWT es inválido. Ingresa en /api/login/ con tu correo para obtener tu token."
   }
   ```
 
 ---
 
-### Paso 2: Intentar login con correo no registrado (Control 404)
+### Paso 2: Intentar login con correo no registrado o error de datos (Control 404 / 400)
 * **Método:** `POST`
 * **URL:** `http://127.0.0.1:8000/api/login/`
 * **Body (JSON):**
@@ -142,10 +142,12 @@ La API navegable de DRF estará disponible en:
 * **Respuesta esperada:** `404 Not Found`
   ```json
   {
-    "error": "Usuario no enrolado",
-    "mensaje": "El correo ingresado no se encuentra registrado en el sistema. Por favor, eleve una solicitud a Administración para ser enrolado."
+    "error": "Usuario no encontrado",
+    "mensaje": "Usuario no existe, solicite su creación al administrador."
   }
   ```
+
+*(Nota: Si el correo existe pero la contraseña es errónea, la API responde `400 Bad Request` con el mensaje: `"Usuario no encontrado, verifique sus datos y vuelva a intentarlo."`)*
 
 ---
 
@@ -154,10 +156,10 @@ La API navegable de DRF estará disponible en:
    ```json
    { "email": "admin@inacap.cl", "password": "inacap123" }
    ```
-   * Copia el valor `"token"` devuelto en la respuesta.
+   * Copia el valor `"access"` (Token JWT) devuelto en la respuesta.
 
 2. **Crear Sala:** `POST http://127.0.0.1:8000/api/salas/`
-   * **Headers:** `Authorization: Token <tu_token_de_admin>`
+   * **Headers:** `Authorization: Bearer <tu_token_jwt_access>`
    * **Body (JSON):**
      ```json
      {
@@ -177,13 +179,13 @@ La API navegable de DRF estará disponible en:
    ```json
    { "email": "roberto.morales@inacap.cl", "password": "inacap123" }
    ```
-   * Copia el `"token"` del docente.
+   * Copia el `"access"` del docente.
 
 2. **Docente intenta crear Sala:** `POST http://127.0.0.1:8000/api/salas/` con su token.
    * **Respuesta esperada:** `403 Forbidden` (`"Solo el administrador puede crear o modificar este recurso."`).
 
 3. **Docente propone Taller:** `POST http://127.0.0.1:8000/api/talleres/`
-   * **Headers:** `Authorization: Token <token_docente>`
+   * **Headers:** `Authorization: Bearer <token_docente>`
    * **Body (JSON):**
      ```json
      {
@@ -207,7 +209,7 @@ La API navegable de DRF estará disponible en:
    ```json
    { "email": "hernan.valenzuela@inacap.cl", "password": "inacap123" }
    ```
-4. **Jefatura aprueba:** `POST http://127.0.0.1:8000/api/talleres/<id_del_taller>/aprobar/` con token de jefatura.
+4. **Jefatura aprueba:** `POST http://127.0.0.1:8000/api/talleres/<id_del_taller>/aprobar/` con token JWT (`Bearer <access>`) de jefatura.
    * **Respuesta esperada:** `200 OK`
      ```json
      {
@@ -219,7 +221,7 @@ La API navegable de DRF estará disponible en:
 ---
 
 ### Paso 6: Inscripción y Validación de Sobrecupo (Cupo = 3)
-1. Inscribe con token al Alumno 1 (`matias.silva@inacap.cl`):
+1. Inscribe con token JWT (`Bearer <access>`) al Alumno 1 (`matias.silva@inacap.cl`):
    * `POST http://127.0.0.1:8000/api/inscripciones/` con body `{"taller": <id_del_taller>}` $\rightarrow$ `201 Created`.
 2. Inscribe al Alumno 2 (`valentina.castro@inacap.cl`) $\rightarrow$ `201 Created`.
 3. Inscribe al Alumno 3 (`nicolas.gomez@inacap.cl`) $\rightarrow$ `201 Created` *(Cupo lleno: 3 de 3)*.

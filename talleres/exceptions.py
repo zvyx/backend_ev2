@@ -10,7 +10,7 @@ def custom_exception_handler(exc, context):
         if response.status_code == status.HTTP_401_UNAUTHORIZED:
             response.data = {
                 'detail': 'Debes iniciar sesión con tu correo para acceder al sistema.',
-                'mensaje': 'No has iniciado sesión. Ingresa en /api/login/ con tu correo para obtener tu token.'
+                'mensaje': 'No has iniciado sesión o tu token JWT es inválido. Ingresa en /api/login/ con tu correo para obtener tu token.'
             }
 
     return response
