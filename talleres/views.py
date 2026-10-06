@@ -8,6 +8,9 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, login as django_login
+from django.contrib import messages
+from django.utils.dateparse import parse_datetime
+from django.utils import timezone
 
 from .models import Usuario, Sala, Taller, Inscripcion, Asistencia
 from .serializers import (
@@ -180,6 +183,25 @@ class CatalogoTalleresView(APIView):
                 'esta_inscrito': t.id in talleres_inscritos_ids,
             })
 
+        # Si es profesor, obtener todos los talleres dictados por él (con contador de inscritos)
+        mis_talleres_docente = []
+        salas_disponibles = []
+        if perfil.rol == 'PROFESOR':
+            talleres_prof = Taller.objects.filter(profesor=perfil).select_related('sala').order_by('-fecha_creacion')
+            for tp in talleres_prof:
+                insc_act = tp.inscripciones.filter(estado='activa').count()
+                mis_talleres_docente.append({
+                    'id': tp.id,
+                    'nombre': tp.nombre,
+                    'descripcion': tp.descripcion,
+                    'sala': tp.sala,
+                    'cupo_maximo': tp.cupo_maximo,
+                    'estado': tp.estado,
+                    'total_inscritos': insc_act,
+                    'fecha_inicio': tp.fecha_inicio,
+                })
+            salas_disponibles = Sala.objects.filter(disponible=True).order_by('nombre')
+
         # Si es jefatura o admin, obtener talleres en estado solicitado para aprobación/rechazo
         talleres_solicitados = []
         if perfil.rol in ['JEFE', 'ADMIN']:
@@ -191,6 +213,8 @@ class CatalogoTalleresView(APIView):
             'usuario': perfil,
             'talleres': talleres_info,
             'mis_inscripciones': mis_inscripciones,
+            'mis_talleres_docente': mis_talleres_docente,
+            'salas_disponibles': salas_disponibles,
             'talleres_solicitados': talleres_solicitados,
             'jwt_token': jwt_token,
         })
@@ -202,43 +226,94 @@ class CatalogoTalleresView(APIView):
 
         accion = request.POST.get('accion')
         taller_id = request.POST.get('taller_id')
-        msg_exito = None
-        msg_error = None
 
+        # 1. Alumno se inscribe en taller aprobado
         if accion == 'inscribir' and perfil.rol == 'ALUMNO':
             taller = Taller.objects.filter(id=taller_id, estado='aprobado').first()
             if not taller:
-                msg_error = "El taller no existe o no se encuentra disponible para inscripción."
+                messages.error(request, "El taller no existe o no se encuentra disponible para inscripción.")
             elif taller.inscripciones.filter(estado='activa').count() >= taller.cupo_maximo:
-                msg_error = "Lo sentimos, el taller no cuenta con cupos disponibles."
+                messages.error(request, "Lo sentimos, el taller no cuenta con cupos disponibles.")
             elif Inscripcion.objects.filter(alumno=perfil, taller=taller, estado='activa').exists():
-                msg_error = "Ya estás inscrito en este taller."
+                messages.warning(request, "Ya estás inscrito en este taller.")
             else:
                 Inscripcion.objects.create(alumno=perfil, taller=taller, estado='activa')
-                msg_exito = f"¡Te has inscrito exitosamente en el taller '{taller.nombre}'!"
+                messages.success(request, f"¡Te has inscrito exitosamente en el taller '{taller.nombre}'!")
 
+        # 2. Alumno cancela su inscripción
         elif accion == 'cancelar' and perfil.rol == 'ALUMNO':
             inscripcion = Inscripcion.objects.filter(alumno=perfil, taller_id=taller_id, estado='activa').first()
             if inscripcion:
                 inscripcion.estado = 'cancelada'
                 inscripcion.save()
-                msg_exito = "Inscripción cancelada correctamente."
+                messages.success(request, "Inscripción cancelada correctamente.")
             else:
-                msg_error = "No se encontró una inscripción activa en este taller."
+                messages.error(request, "No se encontró una inscripción activa en este taller.")
 
+        # 3. Docente solicita la creación de un nuevo taller
+        elif accion == 'solicitar_taller' and perfil.rol == 'PROFESOR':
+            nombre = request.POST.get('nombre', '').strip()
+            descripcion = request.POST.get('descripcion', '').strip()
+            cupo_maximo_raw = request.POST.get('cupo_maximo', '').strip()
+            sala_id = request.POST.get('sala_id', '').strip()
+            fecha_inicio_raw = request.POST.get('fecha_inicio', '').strip()
+
+            if not nombre or not cupo_maximo_raw or not sala_id:
+                messages.error(request, "Por favor completa todos los campos obligatorios (Nombre, Cupo y Sala).")
+            else:
+                try:
+                    cupo_maximo = int(cupo_maximo_raw)
+                    if cupo_maximo <= 0:
+                        raise ValueError()
+                except ValueError:
+                    messages.error(request, "El cupo máximo debe ser un número entero mayor a 0.")
+                    return redirect('catalogo_talleres')
+
+                sala = Sala.objects.filter(id=sala_id).first()
+                if not sala:
+                    messages.error(request, "La sala seleccionada no es válida.")
+                    return redirect('catalogo_talleres')
+
+                # Validar fecha_inicio
+                fecha_inicio = None
+                if fecha_inicio_raw:
+                    fecha_inicio = parse_datetime(fecha_inicio_raw)
+                if not fecha_inicio:
+                    fecha_inicio = timezone.now() + timezone.timedelta(days=7)
+
+                nuevo_taller = Taller.objects.create(
+                    nombre=nombre,
+                    descripcion=descripcion,
+                    cupo_maximo=cupo_maximo,
+                    fecha_inicio=fecha_inicio,
+                    sala=sala,
+                    profesor=perfil,
+                    estado='solicitado'
+                )
+                messages.success(
+                    request,
+                    f"¡Solicitud enviada! El taller '{nuevo_taller.nombre}' fue propuesto y está pendiente de aprobación por Jefatura."
+                )
+
+        # 4. Jefatura o Administrador aprueba propuesta
         elif accion == 'aprobar' and perfil.rol in ['JEFE', 'ADMIN']:
             taller = Taller.objects.filter(id=taller_id, estado='solicitado').first()
             if taller:
                 taller.estado = 'aprobado'
                 taller.save()
-                msg_exito = f"Taller '{taller.nombre}' aprobado con éxito."
+                messages.success(request, f"Taller '{taller.nombre}' aprobado con éxito.")
+            else:
+                messages.error(request, "El taller no existe o ya no se encuentra en estado solicitado.")
 
+        # 5. Jefatura o Administrador rechaza propuesta
         elif accion == 'rechazar' and perfil.rol in ['JEFE', 'ADMIN']:
             taller = Taller.objects.filter(id=taller_id, estado='solicitado').first()
             if taller:
                 taller.estado = 'rechazado'
                 taller.save()
-                msg_exito = f"Taller '{taller.nombre}' rechazado."
+                messages.warning(request, f"Taller '{taller.nombre}' rechazado.")
+            else:
+                messages.error(request, "El taller no existe o ya no se encuentra en estado solicitado.")
 
         # Redirigir de vuelta a la vista GET del catálogo
         return redirect('catalogo_talleres')

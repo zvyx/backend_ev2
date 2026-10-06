@@ -391,7 +391,73 @@
         }
 
         .estado-activa { background: var(--success-bg); color: #065f46; }
+        .estado-aprobado { background: var(--success-bg); color: #065f46; }
         .estado-solicitado { background: var(--warning-bg); color: #92400e; }
+        .estado-rechazado { background: var(--danger-bg); color: #991b1b; }
+        .estado-finalizado { background: #e2e8f0; color: #475569; }
+
+        /* Botón de acción para solicitar taller */
+        .btn-solicitar {
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: background 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-solicitar:hover {
+            background: #c5222f;
+        }
+
+        /* Formulario desplegable / Card para nueva propuesta */
+        .form-card {
+            background: var(--card-bg);
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 28px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-card label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+
+        .form-card input, .form-card select, .form-card textarea {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.88rem;
+            background: #fdfdfd;
+        }
+
+        .form-card input:focus, .form-card select:focus, .form-card textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.15);
+        }
 
         /* Botones de acción de jefatura */
         .btn-aprobar {
@@ -462,6 +528,14 @@
             </div>
         </div>
 
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'warning' %}alert-danger{% else %}alert-success{% endif %}">
+                    <span>{% if message.tags == 'error' %}⚠{% else %}✔{% endif %} {{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+
         {% if mensaje_exito %}
             <div class="alert alert-success">
                 <span>✔ {{ mensaje_exito }}</span>
@@ -471,6 +545,118 @@
         {% if mensaje_error %}
             <div class="alert alert-danger">
                 <span>⚠ {{ mensaje_error }}</span>
+            </div>
+        {% endif %}
+
+        <!-- SI ES PROFESOR: MOSTRAR SUS TALLERES Y OPCIÓN DE SOLICITAR UNO NUEVO -->
+        {% if usuario.rol == 'PROFESOR' %}
+            <div class="section-title">
+                <span>Mis Talleres a Cargo ({{ mis_talleres_docente|length }})</span>
+                <button type="button" class="btn-solicitar" onclick="toggleFormularioTaller()">
+                    <span>➕ Solicitar Creación de Taller</span>
+                </button>
+            </div>
+
+            <!-- FORMULARIO PARA SOLICITAR NUEVO TALLER (DESPLEGABLE / INTERACTIVO) -->
+            <div id="formSolicitarTaller" class="form-card" style="display: none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                    <h3 style="color:var(--primary); font-size:1.05rem;">Propuesta de Nuevo Taller Extracurricular</h3>
+                    <button type="button" onclick="toggleFormularioTaller()" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:var(--text-muted);">&times; Cancelar</button>
+                </div>
+                <p style="font-size:0.83rem; color:var(--text-muted); margin-bottom:16px;">
+                    Completa la información del taller. Tu solicitud quedará en estado <strong>Solicitado</strong> a la espera de ser revisada y aprobada por la Jefatura de Carrera.
+                </p>
+
+                <form method="POST" action="/talleres/">
+                    {% csrf_token %}
+                    <input type="hidden" name="accion" value="solicitar_taller">
+
+                    <div class="form-grid">
+                        <div class="form-group-full">
+                            <label for="nombre">Nombre del Taller (*):</label>
+                            <input type="text" id="nombre" name="nombre" placeholder="ej. Taller Práctico de Microservicios con Docker" required>
+                        </div>
+
+                        <div class="form-group-full">
+                            <label for="descripcion">Descripción y Objetivos:</label>
+                            <textarea id="descripcion" name="descripcion" rows="3" placeholder="Describe brevemente las competencias y temas que se abordarán en el taller..."></textarea>
+                        </div>
+
+                        <div>
+                            <label for="sala_id">Sala / Laboratorio Solicitado (*):</label>
+                            <select id="sala_id" name="sala_id" required>
+                                <option value="">-- Selecciona una sala disponible --</option>
+                                {% for s in salas_disponibles %}
+                                    <option value="{{ s.id }}">
+                                        {{ s.nombre }} [{{ s.codigo }}] - Capacidad: {{ s.capacidad_maxima }} ({{ s.ubicacion|default:'Sin ubicación' }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="cupo_maximo">Cupo Máximo de Alumnos (*):</label>
+                            <input type="number" id="cupo_maximo" name="cupo_maximo" min="1" max="100" value="25" required>
+                        </div>
+
+                        <div>
+                            <label for="fecha_inicio">Fecha y Hora Estimada de Inicio:</label>
+                            <input type="datetime-local" id="fecha_inicio" name="fecha_inicio">
+                        </div>
+                    </div>
+
+                    <div style="display:flex; justify-content:flex-end; gap:10px;">
+                        <button type="button" onclick="toggleFormularioTaller()" class="btn-cancelar" style="width:auto; padding:8px 16px;">Cerrar</button>
+                        <button type="submit" class="btn-solicitar" style="padding:8px 20px;">Enviar Solicitud a Jefatura</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- TABLA DE TALLERES DEL DOCENTE -->
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre del Taller</th>
+                            <th>Sala Asignada</th>
+                            <th>Cupo Máx.</th>
+                            <th>Inscritos</th>
+                            <th>Estado de Solicitud</th>
+                            <th>Fecha de Inicio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for mt in mis_talleres_docente %}
+                            <tr>
+                                <td>
+                                    <strong>{{ mt.nombre }}</strong>
+                                    {% if mt.descripcion %}
+                                        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">{{ mt.descripcion|truncatechars:70 }}</div>
+                                    {% endif %}
+                                </td>
+                                <td>{{ mt.sala.nombre }} ({{ mt.sala.codigo }})</td>
+                                <td>{{ mt.cupo_maximo }} alumnos</td>
+                                <td>
+                                    <span class="cupos-badge {% if mt.total_inscritos >= mt.cupo_maximo %}cupos-full{% else %}cupos-ok{% endif %}">
+                                        {{ mt.total_inscritos }} / {{ mt.cupo_maximo }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge-estado estado-{{ mt.estado }}">
+                                        {{ mt.estado }}
+                                    </span>
+                                </td>
+                                <td>{{ mt.fecha_inicio|date:"d/m/Y H:i" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align:center; color:var(--text-muted); padding:24px;">
+                                    Aún no tienes talleres creados. Presiona el botón <strong>"➕ Solicitar Creación de Taller"</strong> para proponer tu primer taller.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         {% endif %}
 
@@ -637,6 +823,17 @@
             navigator.clipboard.writeText(token).then(() => {
                 alert('Token JWT copiado al portapapeles.');
             });
+        }
+
+        function toggleFormularioTaller() {
+            const formBox = document.getElementById('formSolicitarTaller');
+            if (!formBox) return;
+            if (formBox.style.display === 'none' || formBox.style.display === '') {
+                formBox.style.display = 'block';
+                formBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                formBox.style.display = 'none';
+            }
         }
     </script>
 </body>

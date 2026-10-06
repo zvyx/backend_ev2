@@ -148,7 +148,7 @@
   "pk": 9,
   "fields": {
     "password": "pbkdf2_sha256$1500000$wzhRBXnoncDNnHM0662Rrb$PT6XEcXoFOVzvSKhC5HqWdT5c4qWAAWkq9Jah23NEYw=",
-    "last_login": null,
+    "last_login": "2026-10-06T19:23:47.618Z",
     "is_superuser": false,
     "username": "roberto.morales",
     "first_name": "",
@@ -346,7 +346,7 @@
   "pk": 20,
   "fields": {
     "password": "pbkdf2_sha256$1500000$MGogthwgsrcnYK2QlJQ1YG$hXW4DFfKKVu5LqcqzAsSMpTUu4xzfc8VkDPakHxRALY=",
-    "last_login": "2026-10-06T19:06:37.496Z",
+    "last_login": "2026-10-06T19:10:09.879Z",
     "is_superuser": false,
     "username": "matias.silva",
     "first_name": "",
@@ -987,6 +987,17 @@
   }
 },
 {
+  "model": "talleres.sala",
+  "pk": 9,
+  "fields": {
+    "nombre": "Laboratorio de Redes",
+    "codigo": "LAB-1791314571",
+    "capacidad_maxima": 24,
+    "ubicacion": "Sala B",
+    "disponible": true
+  }
+},
+{
   "model": "talleres.taller",
   "pk": 1,
   "fields": {
@@ -1155,6 +1166,34 @@
   }
 },
 {
+  "model": "talleres.taller",
+  "pk": 13,
+  "fields": {
+    "nombre": "Taller de Ciberseguridad Ofensiva",
+    "descripcion": "Prácticas de seguridad en entornos web con DRF",
+    "cupo_maximo": 20,
+    "fecha_inicio": "2026-11-15T09:00:00Z",
+    "estado": "aprobado",
+    "profesor": 5,
+    "sala": 9,
+    "fecha_creacion": "2026-10-06T19:22:52.479Z"
+  }
+},
+{
+  "model": "talleres.taller",
+  "pk": 14,
+  "fields": {
+    "nombre": "Taller de Inteligencia Artificial Aplicada",
+    "descripcion": "Aprenderemos a integrar LLMs en aplicaciones Django.",
+    "cupo_maximo": 20,
+    "fecha_inicio": "2026-11-01T13:00:00Z",
+    "estado": "solicitado",
+    "profesor": 9,
+    "sala": 4,
+    "fecha_creacion": "2026-10-06T19:23:47.668Z"
+  }
+},
+{
   "model": "talleres.inscripcion",
   "pk": 1,
   "fields": {
@@ -1231,6 +1270,16 @@
     "alumno": 1,
     "taller": 12,
     "fecha_inscripcion": "2026-10-06T19:06:14.327Z",
+    "estado": "activa"
+  }
+},
+{
+  "model": "talleres.inscripcion",
+  "pk": 9,
+  "fields": {
+    "alumno": 1,
+    "taller": 13,
+    "fecha_inscripcion": "2026-10-06T19:22:54.275Z",
     "estado": "activa"
   }
 },
